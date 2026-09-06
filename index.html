@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMIC DICTIONARY POW! 💥</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Inter:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #ffde59;
+            --panel-bg: #ffffff;
+            --border-color: #000000;
+            --accent-red: #ff3333;
+            --accent-blue: #00f0ff;
+            --shadow: 4px 4px 0px #000000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#000000 15%, transparent 16%), radial-gradient(#000000 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 15px;
+            color: #000;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000;
+            letter-spacing: 2px;
+            margin: 0;
+            transform: rotate(-2deg);
+        }
+
+        .subtitle {
+            font-family: 'Permanent Marker', cursive;
+            background: var(--accent-blue);
+            display: inline-block;
+            padding: 4px 12px;
+            border: 3px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transform: rotate(1deg);
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* Seletor de Idiomas em Estilo Selo/Quadrinho */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            scrollbar-width: none;
+        }
+
+        .lang-selector::-webkit-scrollbar {
+            display: none;
+        }
+
+        .lang-btn {
+            background: #fff;
+            border: 3px solid var(--border-color);
+            padding: 8px 12px;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000;
+            transition: all 0.1s ease;
+            white-space: nowrap;
+        }
+
+        .lang-btn.active {
+            background: var(--accent-red);
+            color: #fff;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #000;
+        }
+
+        /* Caixa de Busca */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 3px solid var(--border-color);
+            box-shadow: var(--shadow);
+            outline: none;
+            background: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input[type="text"]::placeholder {
+            color: #666;
+            font-weight: normal;
+        }
+
+        /* Painel de Resultados (Estilo Balão de HQ) */
+        .comic-panel {
+            background: var(--panel-bg);
+            border: 4px solid var(--border-color);
+            box-shadow: 8px 8px 0px #000;
+            padding: 20px;
+            position: relative;
+            margin-top: 15px;
+        }
+
+        .comic-panel::before {
+            content: "💥 BAM!";
+            position: absolute;
+            top: -15px;
+            right: 15px;
+            background: var(--accent-red);
+            color: #fff;
+            font-family: 'Bangers', cursive;
+            padding: 2px 8px;
+            border: 2px solid #000;
+            transform: rotate(5deg);
+            font-size: 1rem;
+        }
+
+        .word-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            margin: 0 0 5px 0;
+            color: #111;
+        }
+
+        .phonetic {
+            font-family: 'Permanent Marker', cursive;
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .translation {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            background: #fffae6;
+            padding: 8px;
+            border: 2px dashed #000;
+        }
+
+        .example-box {
+            background: #eefcff;
+            border: 2px solid #000;
+            padding: 10px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .audio-btn {
+            background: var(--accent-blue);
+            border: 3px solid #000;
+            font-family: 'Bangers', cursive;
+            font-size: 1.2rem;
+            padding: 8px 16px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .audio-btn:active, .lang-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        .error-msg {
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            color: var(--accent-red);
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>COMIC DICTIONARY</h1>
+            <div class="subtitle">O Dicionário Multilíngue Maisado das HQs! ⚡</div>
+        </header>
+
+        <!-- Seletor de Idiomas -->
+        <div class="lang-selector" id="langSelector">
+            <button class="lang-btn active" data-lang="en">🇬🇧 Inglês</button>
+            <button class="lang-btn" data-lang="es">🇪🇸 Espanhol</button>
+            <button class="lang-btn" data-lang="zh">🇨🇳 Mandarim</button>
+            <button class="lang-btn" data-lang="ja">🇯🇵 Japonês</button>
+            <button class="lang-btn" data-lang="ko">🇰🇷 Coreano</button>
+            <button class="lang-btn" data-lang="ru">🇷🇺 Russo</button>
+        </div>
+
+        <!-- Busca -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Digite uma palavra para buscar..." autocomplete="off">
+        </div>
+
+        <!-- Resultado -->
+        <div id="resultContainer">
+            <div class="comic-panel">
+                <h2 class="word-title">⚡ Dica do Dia!</h2>
+                <p>Selecione um idioma acima, digite uma palavra (ex: <i>hello, amor, nihao, arigato</i>) ou explore o dicionário interativo instantâneo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Banco de dados simulado para demonstração imediata
+        const dictionaryData = {
+            en: {
+                "hello": { phonetic: "/həˈloʊ/", meaning: "Olá / Alô", example: "Hello, superhero! Ready to save the day?" },
+                "awesome": { phonetic: "/ˈɔː.səm/", meaning: "Incrível / Espetacular", example: "That comic book action sequence was awesome!" },
+                "hero": { phonetic: "/ˈhɪə.roʊ/", meaning: "Herói / Heroína", example: "Every coder building apps via Git is a hero." }
+            },
+            es: {
+                "hola": { phonetic: "/ˈo.la/", meaning: "Olá", example: "¡Hola, amigo! ¿Cómo va ese código?" },
+                "genial": { phonetic: "/xeˈnjal/", meaning: "Genial / Incrível", example: "¡Qué aplicación tan genial hiciste!" },
+                "fuego": { phonetic: "/ˈfwe.ɣo/", meaning: "Fogo", example: "Ese diseño quedó de fuego." }
+            },
+            zh: {
+                "nǐ hǎo": { phonetic: "Nǐ hǎo (Pinyin)", meaning: "Olá", example: "你好！很高兴见到你。(Olá! Prazer em te conhecer.)" },
+                "péngyǒu": { phonetic: "Péngyǒu (Pinyin)", meaning: "Amigo / Amiga", example: "我们是好朋友。(Nós somos bons amigos.)" }
+            },
+            ja: {
+                "konnichiwa": { phonetic: "こんにちは (Romaji)", meaning: "Olá / Boa tarde", example: "こんにちは、元気ですか？ (Olá, tudo bem?)" },
+                "sugoi": { phonetic: "すごい (Romaji)", meaning: "Incrível / Demais", example: "このアプリはすごいね！ (Este app é incrível!)" }
+            },
+            ko: {
+                "annyeong": { phonetic: "안녕 (Romanização)", meaning: "Olá / Oi (Informal)", example: "안녕! 오늘 어때? (Oi! Como vai hoje?)" },
+                "daebak": { phonetic: "대박 (Romanização)", meaning: "Sensacional / Sucesso", example: "이 앱 정말 대박이다! (Esse app é realmente sensacional!)" }
+            },
+            ru: {
+                "privet": { phonetic: "Привет (Cirílico)", meaning: "Olá / Oi", example: "Привет, как дела? (Oi, como vai?)" },
+                "krasivo": { phonetic: "Красиво (Cirílico)", meaning: "Bonito / Legal", example: "Это очень красиво! (Isso é muito bonito!)" }
+            }
+        };
+
+        let currentLang = 'en';
+
+        const langSelector = document.getElementById('langSelector');
+        const searchInput = document.getElementById('searchInput');
+        const resultContainer = document.getElementById('resultContainer');
+
+        // Trocar de Idioma
+        langSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('lang-btn')) {
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                currentLang = e.target.getAttribute('data-lang');
+                searchInput.value = '';
+                resultContainer.innerHTML = `
+                    <div class="comic-panel">
+                        <h2 class="word-title">⚡ Modo ${e.target.innerText} Ativo!</h2>
+                        <p>Digite uma palavra na barra acima para pesquisar no dicionário pop-art.</p>
+                    </div>`;
+            }
+        });
+
+        // Função de Busca Instantânea
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                resultContainer.innerHTML = `
+                    <div class="comic-panel">
+                        <h2 class="word-title">⚡ Pronto para busca!</h2>
+                        <p>Digite algo para ver a mágica acontecer.</p>
+                    </div>`;
+                return;
+            }
+
+            const langDict = dictionaryData[currentLang] || {};
+            const match = langDict[query];
+
+            if (match) {
+                resultContainer.innerHTML = `
+                    <div class="comic-panel">
+                        <h2 class="word-title">${query.toUpperCase()}</h2>
+                        <div class="phonetic">Pronúncia: ${match.phonetic}</div>
+                        <div class="translation">📖 Significado: ${match.meaning}</div>
+                        <div class="example-box">💬 <strong>Contexto HQ:</strong> "${match.example}"</div>
+                        <button class="audio-btn" onclick="speakWord('${query}', '${currentLang}')">🔊 Ouvir Áudio</button>
+                    </div>
+                `;
+            } else {
+                resultContainer.innerHTML = `
+                    <div class="comic-panel">
+                        <div class="error-msg">❌ PALAVRA NÃO ENCONTRADA NAS HQS!</div>
+                        <p>Tente termos de exemplo como: <strong>${Object.keys(langDict).join(', ')}</strong></p>
+                    </div>
+                `;
+            }
+        });
+
+        // Síntese de Voz Nativa do Navegador
+        function speakWord(text, lang) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : lang === 'ko' ? 'ko-KR' : lang === 'ru' ? 'ru-RU' : lang === 'es' ? 'es-ES' : 'en-US';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Seu navegador não suporta áudio nativo!");
+            }
+        }
+    </script>
+</body>
+</html>
